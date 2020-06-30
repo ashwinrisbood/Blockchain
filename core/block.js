@@ -18,6 +18,11 @@ class Block{
         return new this(currentTime, "NA", this.createHash([],currentTime,"NA"), []);
     }
 
+    static getHash(block){
+        const {timestamp, lastHash, data} = block;
+        return this.createHash(data, timestamp, lastHash);
+    }
+
     static mineBlock(lastBlock, data) {
         const timestamp = dateTime.create().format('m/d/Y H:M:S');
         const lastHash = lastBlock.hash;
