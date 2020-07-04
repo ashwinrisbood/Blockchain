@@ -1,5 +1,6 @@
 const webs = require('ws');
 
+const P2P_PORT = process.env.P2P_PORT || 8000;
 const peers= process.env.PEERS? process.env.PEERS.split(',') : [];
 
 class P2pServer {
@@ -9,9 +10,9 @@ class P2pServer {
     }
 
     listen() {
-        console.log("p2p listening on port 8000...");
+        console.log(`p2p listening on port ${P2P_PORT }...`);
         const server = new webs.Server({
-            port: 8000
+            port: P2P_PORT
         });
 
         server.on('connection', sock => this.connectSocket(sock));
@@ -21,6 +22,8 @@ class P2pServer {
     connectSocket(sock){
         this.sockets.push(sock);
         console.log("sock connected!");
+        this.messageHandler(sock);
+        this.sendChain(sock);
     }
 
     connectToPeers(){
@@ -28,6 +31,23 @@ class P2pServer {
             const sock = new webs(peer);
 
             sock.on('open', () => this.connectSocket(sock));
+        });
+    }
+
+    messageHandler(sock){
+        sock.on('message', (msg) => {
+            const data = JSON.parse(msg);
+            this.blockchain.replaceChain(data);
+        });
+    }
+
+    sendChain(sock){
+        sock.send(JSON.stringify(this.blockchain.chain));
+    }
+
+    syncChains() {
+        this.sockets.forEach(sock => {
+            this.sendChain(sock);
         });
     }
 }

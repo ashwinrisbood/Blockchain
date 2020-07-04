@@ -13,8 +13,6 @@ class Blockchain{
     }
 
     static Validate(chain) {
-        console.log(JSON.stringify(chain[0]));
-        console.log(JSON.stringify(Block.genesis()));
         if(JSON.stringify(chain[0]) !== JSON.stringify(Block.genesis())) return false;
 
         for (let i=1; i<chain.length; i++)

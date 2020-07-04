@@ -3,7 +3,7 @@ const Blockchain = require('../core/blockchain');
 const bp  = require('body-parser');
 const P2pServer = require('./p2p_server');
 
-const HTTP_PORT = 3001;
+const HTTP_PORT = process.env.HTTP_PORT || 3000;
 
 const crypto = express();
 const blockChain  = new Blockchain();
@@ -19,8 +19,9 @@ crypto.post('/mine', (req, res) => {
     const block = blockChain.appendBlock(req.body.data);
     console.log(block.toString() + "   added!!");
 
+    p2p.syncChains();
     res.redirect('/blocks');
 })
 
-crypto.listen(3000, () => console.log('listening on port 3000!'));
+crypto.listen(HTTP_PORT, () => console.log(`listening on port ${HTTP_PORT}!`));
 p2p.listen();
