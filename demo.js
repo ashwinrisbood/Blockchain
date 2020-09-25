@@ -1,9 +1,8 @@
 const Block = require('./core/block');
-const DateTime = require('node-datetime/src/datetime');
+const dateTime = require('node-datetime');
 const Blockchain = require('./core/blockchain');
 
 const blockchain = new Blockchain();
-
 const bluckchen = new Blockchain();
 bluckchen.appendBlock("deraan");
 // const block1 = new Block(DateTime.now,  "123141", "12254141", "noob!!!")
@@ -14,6 +13,13 @@ bluckchen.appendBlock("deraan");
 
 // testBlock.appendBlock("noob!!!")
 
-console.log(blockchain.chain[0].toString());
-console.log(bluckchen.chain[0].toString());
-console.log(blockchain.replaceChain(bluckchen));
+// console.log(blockchain.chain[0].toString());
+// console.log(bluckchen.chain[0].toString());
+// console.log(blockchain.replaceChain(bluckchen));
+
+blockchain.appendBlock("testdata1");
+blockchain.appendBlock("testdata2");
+blockchain.appendBlock("testdata3");
+blockchain.appendBlock("testdata4");
+
+console.log(blockchain.chain.forEach((i) => i.toString()));

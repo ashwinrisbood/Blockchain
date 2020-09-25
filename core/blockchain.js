@@ -7,6 +7,7 @@ class Blockchain{
 
     appendBlock(data) {
         const lastBlock = this.chain[this.chain.length-1];
+        console.log(lastBlock.toString())
         const block = Block.mineBlock(lastBlock, data);
         this.chain.push(block);
         return block;
