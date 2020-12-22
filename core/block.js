@@ -1,7 +1,7 @@
 var dateTime = require('node-datetime');
 var crypto = require('crypto-js');
 
-const DIFFICULTY = 2;
+const DIFFICULTY = 4;
 const MINE_RATE = 1000 // 3 sec - dynamic mine rate
 
 class Block{
@@ -14,20 +14,24 @@ class Block{
         this.difficulty = difficulty || DIFFICULTY;
     }
 
+    //hash the current data
     static createHash(data, timestamp, lastHash, nonce, difficulty){
         return crypto.SHA256(`${data}${timestamp}${lastHash}${nonce}${difficulty}`).toString();
     }
 
+    //genesis - 1st block
     static genesis() {
         var currentTime = new Date();
         return new this(currentTime, "NA", this.createHash([],currentTime,"NA"), [], 0, DIFFICULTY);
     }
 
+    // returns hash for a given block.
     static getHash(block){
         const {timestamp, lastHash, data, nonce} = block;
         return this.createHash(data, timestamp, lastHash, nonce, difficulty);
     }
 
+    // create a new block given the last block.
     static mineBlock(lastBlock, data) {
         let hash;
         let timestamp;

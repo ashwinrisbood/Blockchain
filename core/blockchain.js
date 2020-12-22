@@ -26,7 +26,7 @@ class Blockchain{
     }
 
     replaceChain(chain) {
-        if(chain.length<=this.chain.length || Blockchain.Validate(chain)){
+        if(chain.length<=this.chain.length || !Blockchain.Validate(chain)){
             console.log("invalid length");
             return;
         }

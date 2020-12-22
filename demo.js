@@ -31,7 +31,7 @@ Testing dynamic difficulty
 /*
 Wallets
 */
-// console.log(blockchain.chain.forEach((i) => i.toString()));
+console.log(blockchain.chain.forEach((i) => i.toString()));
 
 const wallet = new Wallet();
 console.log(wallet.toString());
@@ -42,6 +42,16 @@ console.log(Transaction.verifyTransaction(transaction));
 console.log(transaction.input);
 
 //tamper the transaction
-transaction.output[0].amount = 30000;
- 
-console.log(Transaction.verifyTransaction(transaction));
+// transaction.output[0].amount = 30000;
+//  console.log(Transaction.verifyTransaction(transaction));
+
+ // updating transactions 
+ let moreMoney = 100;
+ let moreRecipients = 'morerecipient'
+ let moreTransaction = transaction.update(wallet, moreRecipients, moreMoney);
+
+ console.log(transaction.output.forEach(out => {
+     console.log(`amount: ${out.amount}, ${out.address}`)   
+ }))
+
+
