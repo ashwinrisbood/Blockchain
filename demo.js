@@ -3,6 +3,7 @@ const dateTime = require('node-datetime');
 const Blockchain = require('./core/blockchain');
 const Wallet = require('./wallet/wallet')
 const Transaction = require('./wallet/transaction');
+const TransactionPool = require('./wallet/transaction-pool');
 
 const blockchain = new Blockchain();
 // const bluckchen = new Blockchain();
@@ -30,7 +31,7 @@ Testing dynamic difficulty
 
 /*
 Wallets
-*/
+
 console.log(blockchain.chain.forEach((i) => i.toString()));
 
 const wallet = new Wallet();
@@ -42,6 +43,7 @@ console.log(Transaction.verifyTransaction(transaction));
 console.log(transaction.input);
 
 //tamper the transaction
+
 // transaction.output[0].amount = 30000;
 //  console.log(Transaction.verifyTransaction(transaction));
 
@@ -53,5 +55,28 @@ console.log(transaction.input);
  console.log(transaction.output.forEach(out => {
      console.log(`amount: ${out.amount}, ${out.address}`)   
  }))
+*/
 
+/*
+Tranaction Pool
+*/
+
+let tp = new TransactionPool();
+let wallet = new Wallet();
+// let transaction1 = Transaction.newTransaction(wallet, 'mictest', 30);
+// tp.updateTransaction(transaction1);
+
+// let transaction2 = Transaction.newTransaction(wallet, 'hello', 40);
+// tp.updateTransaction(transaction2);
+
+// console.log(tp.transactions.forEach(out => {
+//     let trans = out.output[0].toString()
+//     console.log(trans)   
+// }))
+wallet.createTransaction('aldy', 50, tp)
+
+console.log(tp.transactions.forEach(out => {
+    let trans = out.output[0].toString()
+    console.log(trans)   
+}))
 
