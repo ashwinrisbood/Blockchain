@@ -1,7 +1,7 @@
 var dateTime = require('node-datetime');
 var crypto = require('crypto-js');
 
-const DIFFICULTY = 4;
+const DIFFICULTY = 2;
 const MINE_RATE = 1000 // 3 sec - dynamic mine rate
 
 class Block{

@@ -11,6 +11,46 @@ class Wallet {
         this.publicKey = this.keyPair.getPublic().encode('hex');
     }
 
+    checkBalance(blockchain) {
+        let balance = this.balance;
+        let allTransactions = [];
+        let thisWalletTransactions = [];
+        blockchain.chain.forEach(block =>  {
+            block.data.forEach(transaction => {
+                allTransactions.push(transaction);
+                if (transaction.input.address === this.publicKey) {
+                    thisWalletTransactions.push(transaction);
+                }
+            })   
+        });
+
+        if (thisWalletTransactions.length > 0) {
+            const latestTransactions = thisWalletTransactions.reduce(
+                (max, cur) => {
+                    max.input.timestamp > cur.input.timestamp? max : cur
+            })
+
+            balance = latestTransactions.output.find(out => out.address === this.publicKey).amount;
+            const lastTimestamp = latestTransactions.input.timestamp;
+            allTransactions.forEach(transaction => {
+                if(transaction.input.timestamp > lastTimestamp){
+                    transaction.output.forEach(out => {
+                        if(out.address === this.publicKey) {
+                            balance += out.amount;
+                        }
+                    })
+                }
+            })
+        }
+        
+        return balance;
+    }
+
+    static cryptoWallet() {
+        const wallet = new this();
+        wallet.address = 'crypto-wallet';
+        return wallet;
+    }
     
     toString(){
         return `Wallet:-
@@ -22,7 +62,9 @@ class Wallet {
         return this.keyPair.sign(dataHash);
     }
 
-    createTransaction(recipient, amount, tp) {
+    createTransaction(recipient, amount, tp, blockChain) {
+        this.balance = this.checkBalance(blockChain)
+
         if (amount > this.balance) {
             console.log(`Amount: ${amount} exceeds current balance: {this.balance}`)
             return;

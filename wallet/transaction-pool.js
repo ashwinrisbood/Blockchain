@@ -1,4 +1,5 @@
 const { mode } = require("crypto-js");
+const Transaction  = require("./transaction") 
 
 class TransactionPool {
 
@@ -21,6 +22,29 @@ class TransactionPool {
 
     existingTransaction(address) {
         return this.transactions.find(t => t.input.address === address);
+    }
+
+    validTransactions() {
+        this.transactions.forEach(transaction => console.log(transaction.output.reduce((total, out) => {
+            return total + out.amount;
+        }, 0)))
+        return this.transactions.filter(transaction => {
+            const count = transaction.output.reduce((total, out) => {
+                return total + out.amount;
+            }, 0);
+
+            if (transaction.input.amount !== count ) {
+                console.log(`invalid transaction from ${transaction.input.address}`);
+                return;
+            }
+
+            if (!Transaction.verifyTransaction(transaction)) {
+                console.log(`invalid signature from from ${transaction.input.address}`);
+                return;
+            }
+
+            return transaction;
+        });
     }
 }
 

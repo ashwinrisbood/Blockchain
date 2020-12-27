@@ -1,4 +1,5 @@
 const ChainUtil = require('../chain-util');
+const aldyCoin = 50;
 
 class Transaction {
     constructor() {
@@ -22,21 +23,30 @@ class Transaction {
     }
 
     static newTransaction(sendersWallet, recipient, amount) {
-        const transaction = new this();
         if (amount > sendersWallet.balance) {
             console.log(`Amount: ${amount} exceeds balance.`);
             return;
         }
 
-        transaction.output.push(...[
+        let outputs = [
             { amount: sendersWallet.balance - amount, address: sendersWallet.publicKey },
-            { amount: amount, address: recipient}
-        ])
+            { amount: amount, address: recipient}]
+        
+        return Transaction.generateTransactions(sendersWallet, outputs);
+    }
 
+    static cryptoTransaction(minerWallet, cryptoWallet) {
+        let output = [ {amount: aldyCoin, address: minerWallet.publicKey} ]
+        return Transaction.generateTransactions(cryptoWallet, output) 
+    }
+
+    static generateTransactions(sendersWallet, outputs) {
+        const transaction = new this();
+        transaction.output.push(...outputs);
         Transaction.signTransaction(transaction, sendersWallet);
         return transaction;
+    } 
 
-    }
     static signTransaction(transaction, sendersWallet) {
         transaction.input = {
             timestamp: Date.now(),

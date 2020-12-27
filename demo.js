@@ -63,20 +63,24 @@ Tranaction Pool
 
 let tp = new TransactionPool();
 let wallet = new Wallet();
-// let transaction1 = Transaction.newTransaction(wallet, 'mictest', 30);
-// tp.updateTransaction(transaction1);
+let transaction1 = Transaction.newTransaction(wallet, 'mictest', 30);
+tp.updateTransaction(transaction1);
 
-// let transaction2 = Transaction.newTransaction(wallet, 'hello', 40);
-// tp.updateTransaction(transaction2);
+let transaction2 = Transaction.newTransaction(wallet, 'hello', 40);
+transaction2.output[1].amount = 300
+tp.updateTransaction(transaction2);
 
 // console.log(tp.transactions.forEach(out => {
 //     let trans = out.output[0].toString()
 //     console.log(trans)   
 // }))
-wallet.createTransaction('aldy', 50, tp)
+// wallet.createTransaction('aldy', 50, tp)
+
 
 console.log(tp.transactions.forEach(out => {
-    let trans = out.output[0].toString()
+    let trans = out.output[0].amount
     console.log(trans)   
 }))
 
+
+console.log(tp.validTransactions());
