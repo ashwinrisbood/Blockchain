@@ -35,3 +35,6 @@ An example flow  of blockchain operations
 
 
 NOTE: The client that Mines recieves a 50 unit crypto for his processing. this is visible in the blockchain that is returned in response to /mine-transactions.
+
+Pending Feature additions: 
+- dynamic add node
